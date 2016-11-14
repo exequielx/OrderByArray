@@ -1,4 +1,4 @@
-<?php
+ <?php
 class test{
     public function test(){
         $criterias = array("dominio","criterio","tipo","alarma");
@@ -32,10 +32,10 @@ class test{
 
     private function groupBy($list, $criterias) {
         $groups = array();
-        if(!$criteria = array_shift($criterias))return;
+        $criteria = array_shift($criterias);
         for ($i = 0; $i  < sizeof($list); $i++) {
             $obj = $list[$i];
-            $val = $obj[$criteria];  
+            $val = isset($obj[$criteria])?$obj[$criteria]:'';  
             $objOut = isset($groups[$val])?$groups[$val]:false;
             if (!$objOut) {
                 $objOut = new stdClass();
@@ -44,6 +44,9 @@ class test{
                 $groups[$val] = $objOut; 
             } 
             $objOut->children[sizeof($objOut->children)] = $obj;
+        }
+        if(!$criteria){
+            return $objOut->children;
         }
         foreach($groups as &$gr){
              $gr->children = $this->groupBy($gr->children, $criterias);
